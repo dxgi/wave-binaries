@@ -1,0 +1,68 @@
+{
+  "author": "akamud",
+  "name": "OneDark",
+  "colors": {
+    "editor.background": "#0f0f10",
+    "editor.foreground": "#f0f0f0"
+  },
+  "tokenColors": [
+    {
+      "name": "Constant",
+      "scope": ["constant", "namespace"],
+      "settings": { "foreground": "#D19A66" }
+    },
+    {
+      "name": "Support Type",
+      "scope": ["support.type", "type", "typeParameter"],
+      "settings": { "foreground": "#56B6C2" }
+    },
+    {
+      "name": "Support Class",
+      "scope": ["support.class", "class", "enum"],
+      "settings": { "foreground": "#E5C07B" }
+    },
+    {
+      "name": "Variable",
+      "scope": ["variable", "parameter", "property", "enumMember"],
+      "settings": { "foreground": "#E06C75" }
+    },
+    {
+      "name": "Event",
+      "scope": ["event"],
+      "settings": {
+        "foreground": "#D19A62"
+      }
+    },
+    {
+      "name": "Support Function",
+      "scope": ["support.function", "method"],
+      "settings": { "foreground": "#56B6C2" }
+    },
+    {
+      "name": "Support Function Any Method",
+      "scope": ["support.function.any-method", "function"],
+      "settings": { "foreground": "#61AFEF" }
+    },
+    {
+      "name": "Keyword",
+      "scope": ["keyword"],
+      "settings": { "foreground": "#C678DD" }
+    },
+    {
+      "name": "Comment",
+      "scope": ["comment"],
+      "settings": { "foreground": "#5C6370", "fontStyle": "italic" }
+    },
+    {
+      "name": "String",
+      "scope": ["string"],
+      "settings": { "foreground": "#98C379" }
+    },
+    {
+      "name": "Constant Numeric",
+      "scope": ["constant.numeric", "number"],
+      "settings": { "foreground": "#D19A66" }
+    }
+  ],
+  "uuid": "32bd64fa-d60a-4858-a5fc-5164cc49a2b8"
+}
