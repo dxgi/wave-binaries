@@ -1,6 +1,6 @@
 -- @environment-functions
 declare class Connection
-    Fuunction: RBXScriptConnection
+    Function: RBXScriptConnection
     State: Enum.ConnectionState
     Enable: () -> ()
     Disable: () -> ()
