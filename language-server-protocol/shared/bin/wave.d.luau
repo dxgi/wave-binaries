@@ -363,6 +363,13 @@ declare class DrawingTriangle extends DrawingObject
     PointC: Vector2
 end
 
+declare class DrawingFonts
+    UI: number
+    System: number
+    Plex: number
+    Monoscape: number
+end
+
 declare class Drawing
     new: (type: "Line") -> DrawingLine  
     new: (type: "Text") -> DrawingText
@@ -372,7 +379,7 @@ declare class Drawing
     new: (type: "Quad") -> DrawingQuad
     new: (type: "Triangle") -> DrawingTriangle
 
-    Fonts: any
+    Fonts: DrawingFonts
 end
 
 declare Drawing: Drawing
