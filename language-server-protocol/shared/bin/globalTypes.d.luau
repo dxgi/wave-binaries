@@ -4571,6 +4571,10 @@ export type RBXScriptSignal<T... = ...any> = {
     Once: (self: RBXScriptSignal<T...>, callback: (T...) -> ()) -> RBXScriptConnection,
 }
 
+declare class GetServiceSignal
+  [string | number]: any
+end
+
 type HttpRequestOptions = {
     Url: string,
     Method: "GET" | "HEAD" | "POST" | "PUT" | "DELETE" | "CONNECT" | "OPTIONS" | "TRACE" | "PATCH" | nil,
@@ -5625,6 +5629,7 @@ declare class Camera extends Instance
 	FieldOfViewMode: EnumFieldOfViewMode
 	FirstPersonTransition: RBXScriptSignal<boolean>
 	Focus: CFrame
+	[string]: any
 	HeadLocked: boolean
 	HeadScale: number
 	InterpolationFinished: RBXScriptSignal<>
@@ -8671,7 +8676,7 @@ declare class VehicleSeat extends BasePart
 	Disabled: boolean
 	HeadsUpDisplay: boolean
 	MaxSpeed: number
-	Occupant: Humanoid?
+	Occupant: Humanoid
 	Steer: number
 	SteerFloat: number
 	Throttle: number
@@ -8684,9 +8689,10 @@ end
 declare class Model extends PVInstance
 	LevelOfDetail: EnumModelLevelOfDetail
 	ModelStreamingMode: EnumModelStreamingMode
-	PrimaryPart: BasePart?
+	PrimaryPart: BasePart
 	Scale: number
 	WorldPivot: CFrame
+	[string]: any
 	function AddPersistentPlayer(self, playerInstance: Player?): nil
 	function GetBoundingBox(self): (CFrame, Vector3)
 	function GetExtentsSize(self): Vector3
@@ -8756,6 +8762,7 @@ end
 
 declare class Workspace extends WorldRoot
 	AirDensity: number
+	[string]: any
 	AllowThirdPartySales: boolean
 	AvatarUnificationMode: EnumAvatarUnificationMode
 	CSGAsyncDynamicCollision: EnumCSGAsyncDynamicCollision
@@ -9073,7 +9080,8 @@ declare class Player extends Instance
 	CameraMinZoomDistance: number
 	CameraMode: EnumCameraMode
 	CanLoadCharacterAppearance: boolean
-	Character: Model?
+	Character: Model
+	[string]: any
 	CharacterAdded: RBXScriptSignal<Model>
 	CharacterAppearanceId: number
 	CharacterAppearanceLoaded: RBXScriptSignal<Model>
@@ -9197,6 +9205,7 @@ declare class Players extends Instance
 	GameAnnounce: RBXScriptSignal<string>
 	LocalPlayer: Player
 	MaxPlayers: number
+	[string]: any
 	MaxPlayersInternal: number
 	PlayerAdded: RBXScriptSignal<Player>
 	PlayerChatted: RBXScriptSignal<EnumPlayerChatType, Player, string, Player?>
@@ -9613,6 +9622,7 @@ declare class RenderingTest extends Instance
 end
 
 declare class ReplicatedFirst extends Instance
+	[string]: any
 	DefaultLoadingGuiRemoved: RBXScriptSignal<>
 	FinishedReplicating: RBXScriptSignal<>
 	RemoveDefaultLoadingGuiSignal: RBXScriptSignal<>
@@ -9622,7 +9632,12 @@ declare class ReplicatedFirst extends Instance
 	function SetDefaultLoadingGuiRemoved(self): nil
 end
 
+declare class CoreGui extends Instance
+	[string]: any
+end
+
 declare class ReplicatedStorage extends Instance
+	[string]: any
 end
 
 declare class RibbonNotificationService extends Instance
@@ -9892,13 +9907,17 @@ end
 declare class ServerStorage extends Instance
 end
 
+declare class SomeOtherService
+    [any]: any
+end
+
 declare class ServiceProvider extends Instance
 	Close: RBXScriptSignal<>
 	CloseLate: RBXScriptSignal<>
 	ServiceAdded: RBXScriptSignal<Instance>
 	ServiceRemoving: RBXScriptSignal<Instance>
 	function FindService(self, className: string): Instance
-	function GetService(self, className: string): Instance
+	function GetService(self, classname: string): SomeOtherService
 end
 
 declare class DataModel extends ServiceProvider
@@ -9918,9 +9937,11 @@ declare class DataModel extends ServiceProvider
 	ScreenshotSavedToAlbum: RBXScriptSignal<string, boolean, string>
 	UniverseMetadataLoaded: RBXScriptSignal<>
 	Workspace: Workspace
+	SoundService: SoundService
 	Players: Players
+	[string]: any
 
-    function HttpGet(self, url: string): string
+    function HttpGet(self, url: string, value: any): string
 
 	function BindToClose(self, func: ((...any) -> ...any)): nil
 	function DefineFastFlag(self, name: string, defaultValue: boolean): boolean
