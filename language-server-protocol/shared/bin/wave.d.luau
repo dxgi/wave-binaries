@@ -255,16 +255,6 @@ declare class base64
     decode: (data: string) -> string
 end
 
-declare class custom
-    encrypt: (cipher: string, data: string, key: string, iv: string) -> string
-    encrypt: (cipher: string, data: string, key: string, nonce: string) -> string
-
-    decrypt: (cipher: string, data: string, key: string, iv: string) -> string
-    decrypt: (cipher: string, data: string, key: string, nonce: string) -> string
-
-    hash: (algorithm: Algorithm, data: string) -> string
-end
-
 declare class crypt
     base64encode: (data: string) -> string
     encrypt: (data: string, key: string, iv: any, String: string) -> string
