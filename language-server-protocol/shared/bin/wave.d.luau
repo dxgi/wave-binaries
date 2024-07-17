@@ -47,6 +47,8 @@ declare function fireclickdetector(detector: ClickDetector, distance: number, ty
 
 declare function fireproximityprompt(prompt: ProximityPrompt, distance: number): ()
 
+declare function firetouchinterest(part: BasePart, totouch: BasePart, toggle: number): ()
+
 declare function isnetworkowner(part: BasePart): boolean
 
 declare function getproperties(object: Instance): { [any]: any }
