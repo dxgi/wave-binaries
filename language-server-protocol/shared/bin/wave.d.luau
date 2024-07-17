@@ -1,15 +1,15 @@
 -- @environment-functions
 declare class Connection
     Function: RBXScriptConnection
-    State: Enum.ConnectionState
+    -- State: Enum.ConnectionState Luau LSP seems to not understand what Enum.ConnectionState is
     Enable: () -> ()
     Disable: () -> ()
     Fire: (...any) -> ()
 end
 
-declare function getgenv(): { [any]: any }
+declare function getgenv(): { [string]: any }
 
-declare function getrenv(): { [any]: any }
+declare function getrenv(): { [string]: any }
 
 declare function getreg(): { [any]: any }
 
@@ -17,7 +17,7 @@ declare function cleardrawcache(): { [any]: any }
 
 declare function setrenderproperty(Drawing: Instance, String: string, Value: boolean): { [any]: Instance }
 
-declare function getgc(include_tables: boolean?): { [any]: any }
+declare function getgc(includeTables: boolean?): { Function | { [any]: any} }
 
 declare function getinstances(): { [any]: Instance }
 
@@ -27,11 +27,11 @@ declare function isrenderobj(instance: any): boolean
 
 declare function getnilinstances(): { [any]: Instance }
 
-declare function getscripts(): { [any]: LocalScript | ModuleScript }
+declare function getscripts(): { LocalScript | ModuleScript }
 
-declare function getloadedmodules(): { [any]: ModuleScript }
+declare function getloadedmodules(excludeCore: boolean?): { ModuleScript }
 
-declare function getconnections(connection: RBXScriptSignal?): { [any]: Connection }
+declare function getconnections(connection: RBXScriptSignal?): { Connection }
 
 declare function firesignal(signal: RBXScriptSignal, ...: any): ()
 
@@ -53,9 +53,9 @@ declare function isnetworkowner(part: BasePart): boolean
 
 declare function getproperties(object: Instance): { [any]: any }
 
-declare function gethui(): any
+declare function gethui(): BasePlayerGui
 
-declare function getrunningscripts(): any
+declare function getrunningscripts(): { LocalScript | ModuleScript }
 
 declare function gethiddenproperty(object: Instance, property: string): any
 
@@ -67,7 +67,7 @@ declare function setsimulationradius(radius: number, max_radius: number): ()
 -- @script-functions
 type Function = (...any) -> any 
 
-declare function getsenv(script: LocalScript | ModuleScript): { [any]: any }
+declare function getsenv(script: LocalScript | ModuleScript): { [string]: any }
 
 declare function getcallingscript(): LocalScript | ModuleScript | nil
 
@@ -115,11 +115,11 @@ declare function mousemoverel(x: number, y: number): ()
 
 declare function setfpscap(fps: number): ()
 
-declare function getthreadidentity(): any
+declare function getthreadidentity(): number
 
-declare function setthreadidentity(value: any): ()
+declare function setthreadidentity(identity: number): ()
 
-declare function getstateenv(state: thread): table
+declare function getstateenv(state: thread): {[string]: any}
 
 declare function identifyexecutor(): any
 
@@ -179,7 +179,7 @@ declare function appendfile(path: string, content: string): ()
 
 declare function loadfile(path: string): (Function | nil, string?)
 
-declare function listfiles(path: string): { [any]: string }
+declare function listfiles(path: string): { string }
 
 declare function isfile(path: string): boolean
 
@@ -203,26 +203,24 @@ declare function setnamecallmethod(method: string): ()
 
 declare function getsynasset(asset: string): string
 
-declare function clonefunction(a: Function): { [any]: any }
+declare function clonefunction<F>(a: F): F
 
-declare function getscriptbytecode(instance: Instance): { [any]: any }
+declare function getscriptbytecode(instance: LocalScript | ModuleScript): string
 
 declare function getspecialinfo(obj: Instance): { [any]: any }
 
-declare function compareinstances(a: Instance, b: Instance): { [any]: any }
+declare function compareinstances(a: Instance, b: Instance): boolean
 
 declare function saveinstance(opt: { mode: "optimized" | "full" | "scripts", noscript: boolean, scriptcache: boolean, timeout: number }?)
 
 declare function messagebox(text: string, caption: string, flags: number): number
 
 -- @cache-library
-declare class cacheF
-    replace: (a: number, b: number) -> number
-    iscached: (a: number) -> number
-    invalidate: (a: number) -> number
-end
-
-declare cache: cacheF
+declare cache: {
+	replace: (object: Instance, newObject: Instance) -> (),
+    iscached: (object: Instance) -> boolean,
+    invalidate: (object: Instance) -> (),
+}
 
 -- @bit-library
 declare class bit
@@ -425,7 +423,7 @@ declare function request(request: Request): Response
 -- @other-definitions
 declare function set_thread_identity(identity: number): ()
 
-declare function isrbxactive(): any
+declare function isrbxactive(): boolean
 
 declare function get_thread_identity(): number
 
@@ -437,4 +435,4 @@ declare function protect_gui(gui: GuiObject): ()
 
 declare function unprotect_gui(gui: GuiObject): ()
 
-declare function loadstring(src: string, chunkname: any?): (any?, any?)
+declare function loadstring(source: string, chunkname: string?): (Function?, string?)
