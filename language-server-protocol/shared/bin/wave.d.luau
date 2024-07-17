@@ -13,9 +13,17 @@ declare function getrenv(): { [any]: any }
 
 declare function getreg(): { [any]: any }
 
+declare function cleardrawcache(): { [any]: any }
+
+declare function setrenderproperty(Drawing: Instance, String: string, Value: boolean): { [any]: Instance }
+
 declare function getgc(include_tables: boolean?): { [any]: any }
 
 declare function getinstances(): { [any]: Instance }
+
+declare function getrenderproperty(instance: Instance, String: string): any
+
+declare function isrenderobj(instance: any): boolean
 
 declare function getnilinstances(): { [any]: Instance }
 
@@ -27,13 +35,25 @@ declare function getconnections(connection: RBXScriptSignal?): { [any]: Connecti
 
 declare function firesignal(signal: RBXScriptSignal, ...: any): ()
 
-declare function fireclickdetector(detector: ClickDetector, distance: number): ()
+declare function getcustomasset(asset: string): any
+
+declare function isscriptable(instance: Instance, String: string): boolean
+
+declare function setscriptable(instance: Instance, String: string, Value: boolean): ()
+
+declare function getcallbackvalue(instance: Instance, type: string)
+
+declare function fireclickdetector(detector: ClickDetector, distance: number, type: string): ()
 
 declare function fireproximityprompt(prompt: ProximityPrompt, distance: number): ()
 
 declare function isnetworkowner(part: BasePart): boolean
 
 declare function getproperties(object: Instance): { [any]: any }
+
+declare function gethui(): any
+
+declare function getrunningscripts(): any
 
 declare function gethiddenproperty(object: Instance, property: string): any
 
@@ -48,6 +68,8 @@ type Function = (...any) -> any
 declare function getsenv(script: LocalScript | ModuleScript): { [any]: any }
 
 declare function getcallingscript(): LocalScript | ModuleScript | nil
+
+declare function cloneref(Part: Instance): { [any]: any }
 
 declare function getscriptclosure(script: LocalScript | ModuleScript): Function
 
@@ -87,19 +109,35 @@ declare function mousescroll(pixel: number): ()
 
 declare function mousemoverel(x: number, y: number): ()
 
+declare function setfpscap(fps: number): ()
+
+declare function getthreadidentity(): any
+
+declare function setthreadidentity(value: any): ()
+
+declare function identifyexecutor(): any
+
+declare function lz4compress(String: string): any
+
+declare function lz4decompress(String: string, raw: any): string
+
 declare function mousemoveabs(x: number, y: number): ()
 
 
 -- @hook-functions
 declare function hookfunction(old: Function, hook: Function): Function
 
-declare function hookmetamethod(object: { [any]: any }, method: string, hook: Function): Function
+declare function hookmetamethod(object: { [any]: any } | any, method: string, hook: Function): Function
 
 declare function newcclosure(func: Function): Function
 
 
 -- @reflection-functions
 declare function checkcaller(): boolean
+
+declare function iscclosure(Instance: Function): boolean
+
+declare function isexecutorclosure(Instance: Function): boolean
 
 declare function islclosure(func: Function): boolean
 
@@ -159,12 +197,26 @@ declare function setnamecallmethod(method: string): ()
 
 declare function getsynasset(asset: string): string
 
+declare function clonefunction(a: Function): { [any]: any }
+
+declare function getscriptbytecode(instance: Instance): { [any]: any }
+
 declare function getspecialinfo(obj: Instance): { [any]: any }
+
+declare function compareinstances(a: Instance, b: Instance): { [any]: any }
 
 declare function saveinstance(opt: { mode: "optimized" | "full" | "scripts", noscript: boolean, scriptcache: boolean, timeout: number }?)
 
 declare function messagebox(text: string, caption: string, flags: number): number
 
+-- @cache-library
+declare class cacheF
+    replace: (a: number, b: number) -> number
+    iscached: (a: number) -> number
+    invalidate: (a: number) -> number
+end
+
+declare cache: cacheF
 
 -- @bit-library
 declare class bit
@@ -208,18 +260,21 @@ declare class custom
 end
 
 declare class crypt
-    encrypt: (data: string, key: string) -> string
-    decrypt: (data: string, key: string) -> string
+    base64encode: (data: string) -> string
+    encrypt: (data: string, key: string, iv: any, String: string) -> string
+    decrypt: (data: string, key: string, iv: any, String: string) -> string
     hash: (data: string) -> string
     derive: (data: string, length: number) -> string
     random: (size: number) -> string
-
+    generatekey: () -> string
+    base64decode: (data: string) -> string
     base64: base64
     custom: custom
+    hash: (String: string, table: any) -> string
+    generatebytes: (size: number) -> string
 end
 
 declare crypt: crypt
-
 
 -- @debug-library
 declare class debug
@@ -228,15 +283,15 @@ declare class debug
     setconstant: (target: Function | number, index: number | string, value: number | string | boolean | nil) -> ()
     getupvalues: (target: Function | number) -> { [any]: any }
     getupvalue: (target: Function | number, index: number) -> any
-    setupvalue: (target: Function | number, index: number, value: { [any]: any }) -> ()
+    setupvalue: (target: Function | number, index: number, value: { [any]: any } | any) -> ()
     getprotos: (target: Function) -> { [any]: any }
-    getproto: (target: Function, index: number, activated: boolean?) -> Function
+    getproto: (target: Function, index: number, activated: boolean?) -> any
     setproto: (target: Function, index: number, value: Function) -> ()
-    getstack: (level: number) -> { [any]: any }
-    setstack: (level: number, index: number, value: { [any]: any }) -> ()
+    getstack: (level: number, index: number | nil) -> any
+    setstack: (level: number, index: number, value: { [any]: any } | string) -> ()
     setmetatable: (target: { [any]: any }, metatable: { [any]: any }) -> ()
     getregistry: () -> { [any]: any }
-    getinfo: (target: Function | number, what: "flnSu") -> { [any]: any }
+    getinfo: (target: Function | number, what: string | nil) -> string
 end
 
 declare debug: debug
@@ -317,7 +372,7 @@ declare class Drawing
     new: (type: "Quad") -> DrawingQuad
     new: (type: "Triangle") -> DrawingTriangle
 
-    Fonts: { "UI" | "System" | "Plex" | "Monoscape" }
+    Fonts: any
 end
 
 declare Drawing: Drawing
@@ -332,10 +387,12 @@ declare class Socket
 end
 
 declare class WebSocket
+    connect: (url: string) -> Socket
     Connect: (url: string) -> Socket
 end
 
 declare websocket: WebSocket
+declare WebSocket: WebSocket
 
 -- @request-definitions
 type Request = {
@@ -361,6 +418,8 @@ declare function request(request: Request): Response
 -- @other-definitions
 declare function set_thread_identity(identity: number): ()
 
+declare function isrbxactive(): any
+
 declare function get_thread_identity(): number
 
 declare function write_clipboard(content: string): ()
@@ -371,4 +430,4 @@ declare function protect_gui(gui: GuiObject): ()
 
 declare function unprotect_gui(gui: GuiObject): ()
 
-declare function loadstring(src: string, chunkname: string?): ((() -> any), string?)
+declare function loadstring(src: string, chunkname: any?): (any?, any?)
