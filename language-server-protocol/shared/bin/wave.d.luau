@@ -91,6 +91,8 @@ declare function isreadonly(table: { [any]: any }): boolean
 -- @input-functions
 declare function iswindowactive(): boolean
 
+declare function isrbxactive(): boolean
+
 declare function keypress(key: number): ()
 
 declare function keyrelease(key: number): ()
@@ -116,6 +118,8 @@ declare function setfpscap(fps: number): ()
 declare function getthreadidentity(): any
 
 declare function setthreadidentity(value: any): ()
+
+declare function getstateenv(state: thread): table
 
 declare function identifyexecutor(): any
 
