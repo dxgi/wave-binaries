@@ -47,6 +47,8 @@ declare function fireclickdetector(detector: ClickDetector, distance: number, ty
 
 declare function fireproximityprompt(prompt: ProximityPrompt, distance: number): ()
 
+declare function firetouchinterest(part: BasePart, totouch: BasePart, toggle: number): ()
+
 declare function isnetworkowner(part: BasePart): boolean
 
 declare function getproperties(object: Instance): { [any]: any }
@@ -89,6 +91,8 @@ declare function isreadonly(table: { [any]: any }): boolean
 -- @input-functions
 declare function iswindowactive(): boolean
 
+declare function isrbxactive(): boolean
+
 declare function keypress(key: number): ()
 
 declare function keyrelease(key: number): ()
@@ -114,6 +118,8 @@ declare function setfpscap(fps: number): ()
 declare function getthreadidentity(): any
 
 declare function setthreadidentity(value: any): ()
+
+declare function getstateenv(state: thread): table
 
 declare function identifyexecutor(): any
 
