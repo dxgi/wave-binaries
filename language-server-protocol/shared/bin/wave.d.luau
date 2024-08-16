@@ -1,47 +1,47 @@
 -- @environment-functions
 declare class Connection
     Function: RBXScriptConnection
-    State: Enum.ConnectionState
-    Enable: () -> ()
-    Disable: () -> ()
-    Fire: (...any) -> ()
+    -- State: Enum.ConnectionState Luau LSP seems to not understand what Enum.ConnectionState is
+    function Enable(self): ()
+    function Disable(self): ()
+    function Fire(self, ...: any): ()
 end
 
-declare function getgenv(): { [any]: any }
+declare function getgenv(): { [string]: any }
 
-declare function getrenv(): { [any]: any }
+declare function getrenv(): { [string]: any }
 
 declare function getreg(): { [any]: any }
 
-declare function cleardrawcache(): { [any]: any }
+declare function cleardrawcache(): ()
 
-declare function setrenderproperty(Drawing: Instance, String: string, Value: boolean): { [any]: Instance }
+declare function setrenderproperty(drawing: DrawingObject, property: string, value: any): ()
 
-declare function getgc(include_tables: boolean?): { [any]: any }
+declare function getgc(includeTables: boolean?): { Function | { [any]: any} }
 
-declare function getinstances(): { [any]: Instance }
+declare function getinstances(): { Instance }
 
-declare function getrenderproperty(instance: Instance, String: string): any
+declare function getrenderproperty(drawing: DrawingObject, property: string): any
 
 declare function isrenderobj(instance: any): boolean
 
-declare function getnilinstances(): { [any]: Instance }
+declare function getnilinstances(): { Instance }
 
-declare function getscripts(): { [any]: LocalScript | ModuleScript }
+declare function getscripts(): { LocalScript | ModuleScript }
 
-declare function getloadedmodules(): { [any]: ModuleScript }
+declare function getloadedmodules(excludeCore: boolean?): { ModuleScript }
 
-declare function getconnections(connection: RBXScriptSignal?): { [any]: Connection }
+declare function getconnections(connection: RBXScriptSignal): { Connection }
 
 declare function firesignal(signal: RBXScriptSignal, ...: any): ()
 
 declare function getcustomasset(asset: string): any
 
-declare function isscriptable(instance: Instance, String: string): boolean
+declare function isscriptable(instance: Instance, property: string): boolean
 
-declare function setscriptable(instance: Instance, String: string, Value: boolean): ()
+declare function setscriptable(instance: Instance, property: string, value: boolean): ()
 
-declare function getcallbackvalue(instance: Instance, type: string)
+declare function getcallbackvalue(instance: Instance, property: string)
 
 declare function fireclickdetector(detector: ClickDetector, distance: number, type: string): ()
 
@@ -51,27 +51,27 @@ declare function firetouchinterest(part: BasePart, totouch: BasePart, toggle: nu
 
 declare function isnetworkowner(part: BasePart): boolean
 
-declare function getproperties(object: Instance): { [any]: any }
+declare function getproperties(object: Instance): { string }
 
-declare function gethui(): any
+declare function gethui(): BasePlayerGui
 
-declare function getrunningscripts(): any
+declare function getrunningscripts(): { LocalScript | ModuleScript }
 
 declare function gethiddenproperty(object: Instance, property: string): any
 
 declare function sethiddenproperty(object: Instance, property: string, value: any): ()
 
-declare function setsimulationradius(radius: number, max_radius: number): ()
+declare function setsimulationradius(radius: number, maxRadius: number): ()
 
 
 -- @script-functions
 type Function = (...any) -> any 
 
-declare function getsenv(script: LocalScript | ModuleScript): { [any]: any }
+declare function getsenv(script: LocalScript | ModuleScript): { [string]: any }
 
 declare function getcallingscript(): LocalScript | ModuleScript | nil
 
-declare function cloneref(Part: Instance): { [any]: any }
+declare function cloneref<T>(Part: T): T
 
 declare function getscriptclosure(script: LocalScript | ModuleScript): Function
 
@@ -79,7 +79,7 @@ declare function getscripthash(script: LocalScript | ModuleScript): string
 
 
 -- @table-functions
-declare function getrawmetatable(table: { [any]: any }): { [any]: any }
+declare function getrawmetatable<T>(table: T): T
 
 declare function setrawmetatable(table: { [any]: any }, metatable: { [any]: any }): boolean
 
@@ -115,35 +115,35 @@ declare function mousemoverel(x: number, y: number): ()
 
 declare function setfpscap(fps: number): ()
 
-declare function getthreadidentity(): any
+declare function getthreadidentity(): number
 
-declare function setthreadidentity(value: any): ()
+declare function setthreadidentity(identity: number): ()
 
-declare function getstateenv(state: thread): table
+declare function getstateenv(state: thread): {[string]: any}
 
 declare function identifyexecutor(): any
 
-declare function lz4compress(String: string): any
+declare function lz4compress(data: string): any
 
-declare function lz4decompress(String: string, raw: any): string
+declare function lz4decompress(data: string, raw: any): string
 
 declare function mousemoveabs(x: number, y: number): ()
 
 
 -- @hook-functions
-declare function hookfunction(old: Function, hook: Function): Function
+declare function hookfunction<T>(old: T, hook: Function): T
 
-declare function hookmetamethod(object: { [any]: any } | any, method: string, hook: Function): Function
+declare function hookmetamethod(object: any, method: string, hook: Function): Function
 
-declare function newcclosure(func: Function): Function
+declare function newcclosure<T>(func: T): T
 
 
 -- @reflection-functions
 declare function checkcaller(): boolean
 
-declare function iscclosure(Instance: Function): boolean
+declare function iscclosure(func: Function): boolean
 
-declare function isexecutorclosure(Instance: Function): boolean
+declare function isexecutorclosure(func: Function): boolean
 
 declare function islclosure(func: Function): boolean
 
@@ -177,9 +177,9 @@ declare function writefile(path: string, content: string): ()
 
 declare function appendfile(path: string, content: string): ()
 
-declare function loadfile(path: string): (Function | nil, string?)
+declare function loadfile(path: string): (Function?, string?)
 
-declare function listfiles(path: string): { [any]: string }
+declare function listfiles(path: string): { string }
 
 declare function isfile(path: string): boolean
 
@@ -203,57 +203,47 @@ declare function setnamecallmethod(method: string): ()
 
 declare function getsynasset(asset: string): string
 
-declare function clonefunction(a: Function): { [any]: any }
+declare function clonefunction<F>(a: F): F
 
-declare function getscriptbytecode(instance: Instance): { [any]: any }
+declare function getscriptbytecode(instance: LocalScript | ModuleScript): string
 
 declare function getspecialinfo(obj: Instance): { [any]: any }
 
-declare function compareinstances(a: Instance, b: Instance): { [any]: any }
+declare function compareinstances(a: Instance, b: Instance): boolean
 
 declare function saveinstance(opt: { mode: "optimized" | "full" | "scripts", noscript: boolean, scriptcache: boolean, timeout: number }?)
 
 declare function messagebox(text: string, caption: string, flags: number): number
 
 -- @cache-library
-declare class cacheF
-    replace: (a: number, b: number) -> number
-    iscached: (a: number) -> number
-    invalidate: (a: number) -> number
-end
-
-declare cache: cacheF
+declare cache: {
+	replace: (object: Instance, newObject: Instance) -> (),
+    iscached: (object: Instance) -> boolean,
+    invalidate: (object: Instance) -> (),
+}
 
 -- @bit-library
-declare class bit
-    bdiv: (dividend: number, divisor: number) -> number
-    badd: (a: number, b: number) -> number
-    bsub: (a: number, b: number) -> number
-    bmul: (val: number, by: number) -> number
-    band: (val: number, by: number) -> number
-    bor: (val: number, by: number) -> number
-    bxor: (val: number, by: number) -> number
-    bnot: (val: number) -> number
-    bswap: (val: number) -> number
-    ror: (value: number, rotate_count: number) -> number
-    rol: (value: number, rotate_count: number) -> number
-    tohex: (val: number) -> string
-    tobit: (val: number) -> number
-    lshift: (val: number, by: number) -> number
-    rshift: (val: number, by: number) -> number
+declare bit: {
+	bdiv: (dividend: number, divisor: number) -> number,
+    badd: (a: number, b: number) -> number,
+    bsub: (a: number, b: number) -> number,
+    bmul: (val: number, by: number) -> number,
+    band: (val: number, by: number) -> number,
+    bor: (val: number, by: number) -> number,
+    bxor: (val: number, by: number) -> number,
+    bnot: (val: number) -> number,
+    bswap: (val: number) -> number,
+    ror: (value: number, rotate_count: number) -> number,
+    rol: (value: number, rotate_count: number) -> number,
+    tohex: (val: number) -> string,
+    tobit: (val: number) -> number,
+    lshift: (val: number, by: number) -> number,
+    rshift: (val: number, by: number) -> number,
     arshift: (val: number, shift_count: number) -> number
-end
-
-declare bit: bit
-
+}
 
 -- @crypt-library
 type Algorithm = "aes-cbc" | "aes-cfb" | "aes-ctr" | "aes-ofb" | "aes-gcm" | "aes-eax" | "bf-cbc" | "bf-cfb" | "bf-ofb"
-
-declare class base64
-    encode: (data: string) -> string
-    decode: (data: string) -> string
-end
 
 declare crypt: {
     base64encode: (data: string) -> string,
@@ -264,7 +254,10 @@ declare crypt: {
     random: (size: number) -> string,
     generatekey: () -> string,
     base64decode: (data: string) -> string,
-    base64: base64,
+    base64: {
+		encode: (data: string) -> string,
+    	decode: (data: string) -> string
+	},
     custom: {
         encrypt: (cipher: string, data: string, key: string, iv: string) -> string,
         encrypt: (cipher: string, data: string, key: string, nonce: string) -> string,
@@ -277,25 +270,22 @@ declare crypt: {
 }
 
 -- @debug-library
-declare class debug
-    getconstants: (target: Function | number) -> { [any]: any }
-    getconstant: (target: Function | number, index: number) -> any
-    setconstant: (target: Function | number, index: number | string, value: number | string | boolean | nil) -> ()
-    getupvalues: (target: Function | number) -> { [any]: any }
-    getupvalue: (target: Function | number, index: number) -> any
-    setupvalue: (target: Function | number, index: number, value: { [any]: any } | any) -> ()
-    getprotos: (target: Function) -> { [any]: any }
-    getproto: (target: Function, index: number, activated: boolean?) -> any
-    setproto: (target: Function, index: number, value: Function) -> ()
-    getstack: (level: number, index: number | nil) -> any
-    setstack: (level: number, index: number, value: { [any]: any } | string) -> ()
-    setmetatable: (target: { [any]: any }, metatable: { [any]: any }) -> ()
-    getregistry: () -> { [any]: any }
+declare debug: {
+	getconstants: (target: Function | number) -> { any },
+    getconstant: (target: Function | number, index: number) -> any,
+    setconstant: (target: Function | number, index: number | string, value: number | string | boolean | nil) -> (),
+    getupvalues: (target: Function | number) -> { any },
+    getupvalue: (target: Function | number, index: number) -> any,
+    setupvalue: (target: Function | number, index: number, value: any) -> (),
+    getprotos: (target: Function) -> { any },
+    getproto: (target: Function, index: number, activated: boolean?) -> any,
+    setproto: (target: Function, index: number, value: Function) -> (),
+    getstack: (level: number, index: number | nil) -> any,
+    setstack: (level: number, index: number, value: any) -> (),
+    setmetatable: (target: { [any]: any }, metatable: { [any]: any }) -> (),
+    getregistry: () -> { [any]: any },
     getinfo: (target: Function | number, what: string | nil) -> string
-end
-
-declare debug: debug
-
+}
 
 -- @drawing-library
 declare class DrawingObject
@@ -370,19 +360,17 @@ declare class DrawingFonts
     Monoscape: number
 end
 
-declare class Drawing
-    new: (type: "Line") -> DrawingLine  
-    new: (type: "Text") -> DrawingText
-    new: (type: "Image") -> DrawingImage
-    new: (type: "Circle") -> DrawingCircle
-    new: (type: "Square") -> DrawingSquare
-    new: (type: "Quad") -> DrawingQuad
-    new: (type: "Triangle") -> DrawingTriangle
+declare Drawing: {
+	new: (type: "Line") -> DrawingLine,
+    new: (type: "Text") -> DrawingText,
+    new: (type: "Image") -> DrawingImage,
+    new: (type: "Circle") -> DrawingCircle,
+    new: (type: "Square") -> DrawingSquare,
+    new: (type: "Quad") -> DrawingQuad,
+    new: (type: "Triangle") -> DrawingTriangle,
 
     Fonts: DrawingFonts
-end
-
-declare Drawing: Drawing
+}
 
 
 -- @websocket-library
@@ -393,10 +381,10 @@ declare class Socket
     OnClose: RBXScriptSignal
 end
 
-declare class WebSocket
-    connect: (url: string) -> Socket
+type WebSocket = {
+	connect: (url: string) -> Socket,
     Connect: (url: string) -> Socket
-end
+}
 
 declare websocket: WebSocket
 declare WebSocket: WebSocket
@@ -425,7 +413,7 @@ declare function request(request: Request): Response
 -- @other-definitions
 declare function set_thread_identity(identity: number): ()
 
-declare function isrbxactive(): any
+declare function isrbxactive(): boolean
 
 declare function get_thread_identity(): number
 
@@ -437,4 +425,4 @@ declare function protect_gui(gui: GuiObject): ()
 
 declare function unprotect_gui(gui: GuiObject): ()
 
-declare function loadstring(src: string, chunkname: any?): (any?, any?)
+declare function loadstring(source: string, chunkname: string?): (Function?, string?)
